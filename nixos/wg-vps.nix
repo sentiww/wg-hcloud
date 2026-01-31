@@ -65,12 +65,27 @@ in
   };
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = false;
+
+  boot.loader.grub = {
+    enable = true;
+    devices = [ config.disko.devices.disk.main.device ];
+
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+  };
+
+  boot.loader.efi = {
+    canTouchEfiVariables = false;
+    efiSysMountPoint = "/boot";
+  };
+
   boot.initrd.availableKernelModules = [
     "ahci"
+    "nvme"
     "virtio_pci"
     "virtio_scsi"
+    "virtio_blk"
     "sd_mod"
     "sr_mod"
   ];

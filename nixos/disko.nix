@@ -1,12 +1,19 @@
-{ ... }:
+{ lib, ... }:
 {
   disko.devices = {
     disk.main = {
       type = "disk";
-      device = "/dev/sda";
+
+      device = lib.mkDefault "/dev/sda";
+
       content = {
         type = "gpt";
         partitions = {
+          BIOS = {
+            size = "1M";
+            type = "EF02";
+          };
+
           ESP = {
             size = "512M";
             type = "EF00";

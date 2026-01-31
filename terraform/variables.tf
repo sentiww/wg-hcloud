@@ -10,12 +10,12 @@ variable "name" {
 
 variable "location" {
   type    = string
-  default = "fsn1"
+  default = "nbg1"
 }
 
 variable "server_type" {
   type    = string
-  default = "cx22"
+  default = "cx23"
 }
 
 variable "bootstrap_image" {
