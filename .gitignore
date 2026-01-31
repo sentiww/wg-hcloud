@@ -1,0 +1,13 @@
+# sops
+secrets/age-key.txt
+
+# wireguard
+**/*.key
+**/wg-*.conf
+**/wireguard/*.conf
+
+# terraform
+terraform/terraform.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform/
