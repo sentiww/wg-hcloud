@@ -50,6 +50,10 @@ in
     KbdInteractiveAuthentication = false;
     PermitRootLogin = "prohibit-password";
   };
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIdcypYPw+bTPjdOGk6681S7Gm9MbrRUD6xf94tgy+u7 wojciech.warwas01@gmail.com"
+  ];
+
 
   networking.firewall = {
     enable = true;
@@ -58,6 +62,25 @@ in
   };
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.availableKernelModules = [
+    "ahci"
+    "virtio_pci"
+    "virtio_scsi"
+    "sd_mod"
+    "sr_mod"
+  ];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-partlabel/disk-main-root";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-partlabel/disk-main-ESP";
+    fsType = "vfat";
+  };
 
   networking.nat = {
     enable = true;
