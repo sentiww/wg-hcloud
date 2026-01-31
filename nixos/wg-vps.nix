@@ -11,6 +11,15 @@ let
     lib.unique (lib.filter (s: s != null)
       (lib.mapAttrsToList (_: p: p.presharedKeySecret or null) peersByName));
 
+  pskSecretAttrs =
+    builtins.listToAttrs (map (name: {
+      inherit name;
+      value = {
+        owner = "root";
+        mode = "0400";
+      };
+    }) pskSecrets);
+
   peersList =
     lib.mapAttrsToList (_name: peer:
       let
@@ -72,18 +81,13 @@ in
     "d /var/lib/sops-nix 0700 root root -"
   ];
 
-  sops.secrets."wg/server_private_key" = {
-    owner = "root";
-    mode = "0400";
-  };
-
-  sops.secrets = (config.sops.secrets or {}) // builtins.listToAttrs (map (name: {
-    name = name;
-    value = {
-      owner = "root";
-      mode = "0400";
+  sops.secrets =
+    pskSecretAttrs // {
+      "wg/server_private_key" = {
+        owner = "root";
+        mode = "0400";
+      };
     };
-  }) pskSecrets);
 
   networking.wireguard.interfaces.${wgIf} = {
     ips = [ wgAddr ];
