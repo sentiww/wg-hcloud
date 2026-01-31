@@ -57,8 +57,11 @@ in
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
+    allowedTCPPorts = [ 22 51820 ];
     allowedUDPPorts = [ wgPort ];
+    extraInputRules = ''  
+    iifname "wg0" tcp dport 22 accept
+    '';
   };
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
